@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from stockstats import StockDataFrame as Sdf
 from finrl.config import config
+from finrl.marketdata.yahoodownloader import YahooDownloader
 
 
 class FeatureEngineer:
@@ -29,11 +30,13 @@ class FeatureEngineer:
         self,
         use_technical_indicator=True,
         tech_indicator_list=config.TECHNICAL_INDICATORS_LIST,
+        use_vix = False,
         use_turbulence=False,
         user_defined_feature=False,
     ):
         self.use_technical_indicator = use_technical_indicator
         self.tech_indicator_list = tech_indicator_list
+        self.use_vix = use_vix
         self.use_turbulence = use_turbulence
         self.user_defined_feature = user_defined_feature
 
@@ -47,7 +50,12 @@ class FeatureEngineer:
             # add technical indicators using stockstats
             df = self.add_technical_indicator(df)
             print("Successfully added technical indicators")
-
+            
+        # add vix for multiple stock
+        if self.use_vix == True:
+            df = self.add_vix(df)
+            print("Successfully added vix")
+            
         # add turbulence index for multiple stock
         if self.use_turbulence == True:
             df = self.add_turbulence(df)
@@ -64,12 +72,13 @@ class FeatureEngineer:
 
     def add_technical_indicator(self, data):
         """
-        calcualte technical indicators
+        calculate technical indicators
         use stockstats package to add technical inidactors
         :param data: (df) pandas dataframe
         :return: (df) pandas dataframe
         """
         df = data.copy()
+        df = df.sort_values(by=['tic','date'])
         stock = Sdf.retype(df.copy())
         unique_ticker = stock.tic.unique()
 
@@ -79,12 +88,15 @@ class FeatureEngineer:
                 try:
                     temp_indicator = stock[stock.tic == unique_ticker[i]][indicator]
                     temp_indicator = pd.DataFrame(temp_indicator)
+                    temp_indicator['tic'] = unique_ticker[i]
+                    temp_indicator['date'] = df[df.tic == unique_ticker[i]]['date'].to_list()
                     indicator_df = indicator_df.append(
                         temp_indicator, ignore_index=True
                     )
                 except Exception as e:
                     print(e)
-            df[indicator] = indicator_df
+            df = df.merge(indicator_df[['tic','date',indicator]],on=['tic','date'],how='left')
+        df = df.sort_values(by=['date','tic'])
         return df
 
     def add_user_defined_feature(self, data):
@@ -99,6 +111,23 @@ class FeatureEngineer:
         # df['return_lag_2']=df.close.pct_change(3)
         # df['return_lag_3']=df.close.pct_change(4)
         # df['return_lag_4']=df.close.pct_change(5)
+        return df
+    
+    def add_vix(self, data):
+        """
+        add vix from yahoo finance
+        :param data: (df) pandas dataframe
+        :return: (df) pandas dataframe
+        """
+        df = data.copy()
+        df_vix = YahooDownloader(start_date = df.date.min(),
+                                end_date = df.date.max(),
+                                ticker_list = ["^VIX"]).fetch_data()
+        vix = df_vix[['date','close']]
+        vix.columns = ['date','vix']
+
+        df = df.merge(vix, on="date")
+        df = df.sort_values(["date", "tic"]).reset_index(drop=True)
         return df
 
     def add_turbulence(self, data):
@@ -130,11 +159,19 @@ class FeatureEngineer:
         for i in range(start, len(unique_date)):
             current_price = df_price_pivot[df_price_pivot.index == unique_date[i]]
             # use one year rolling window to calcualte covariance
-            hist_price = df_price_pivot[(df_price_pivot.index < unique_date[i]) & (df_price_pivot.index >= unique_date[i-252])]
+            hist_price = df_price_pivot[
+                (df_price_pivot.index < unique_date[i])
+                & (df_price_pivot.index >= unique_date[i - 252])
+            ]
+            # Drop tickers which has number missing values more than the "oldest" ticker
+            filtered_hist_price = hist_price.iloc[hist_price.isna().sum().min():].dropna(axis=1)
 
-            cov_temp = hist_price.cov()
-            current_temp = current_price - np.mean(hist_price, axis=0)
-            temp = current_temp.values.dot(np.linalg.inv(cov_temp)).dot(
+            cov_temp = filtered_hist_price.cov()
+            current_temp = current_price[[x for x in filtered_hist_price]] - np.mean(filtered_hist_price, axis=0)
+            #cov_temp = hist_price.cov()
+            #current_temp=(current_price - np.mean(hist_price,axis=0))
+            
+            temp = current_temp.values.dot(np.linalg.pinv(cov_temp)).dot(
                 current_temp.values.T
             )
             if temp > 0:

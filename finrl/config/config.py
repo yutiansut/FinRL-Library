@@ -13,13 +13,13 @@ import os
 # PACKAGE_ROOT = pathlib.Path(finrl.__file__).resolve().parent
 # PACKAGE_ROOT = pathlib.Path().resolve().parent
 
-# TRAINED_MODEL_DIR = PACKAGE_ROOT / "trained_models"
+TRAINED_MODEL_DIR = f"trained_models"
 # DATASET_DIR = PACKAGE_ROOT / "data"
 
 # data
-TRAINING_DATA_FILE = "data/ETF_SPY_2009_2020.csv"
-TURBULENCE_DATA = "data/dow30_turbulence_index.csv"
-TESTING_DATA_FILE = "test.csv"
+# TRAINING_DATA_FILE = "data/ETF_SPY_2009_2020.csv"
+# TURBULENCE_DATA = "data/dow30_turbulence_index.csv"
+# TESTING_DATA_FILE = "test.csv"
 
 # now = datetime.datetime.now()
 # TRAINED_MODEL_DIR = f"trained_models/{now}"
@@ -32,7 +32,7 @@ RESULTS_DIR = f"results"
 
 ## time_fmt = '%Y-%m-%d'
 START_DATE = "2009-01-01"
-END_DATE = "2020-12-01"
+END_DATE = "2021-01-01"
 
 START_TRADE_DATE = "2019-01-01"
 
@@ -41,7 +41,8 @@ DEFAULT_DATA_COLUMNS = ["date", "tic", "close"]
 
 ## stockstats technical indicator column names
 ## check https://pypi.org/project/stockstats/ for different names
-TECHNICAL_INDICATORS_LIST = ["macd", "rsi_30", "cci_30", "dx_30"]
+#TECHNICAL_INDICATORS_LIST = ["macd","boll_ub","boll_lb","rsi_30", "cci_30", "dx_30","close_30_sma","close_60_sma"]
+TECHNICAL_INDICATORS_LIST = ["macd","rsi_30", "cci_30", "dx_30"]
 
 
 ## Model Parameters
@@ -68,7 +69,33 @@ SAC_PARAMS = {
 SINGLE_TICKER = ["AAPL"]
 
 # self defined
-MULTIPLE_STOCK_TICKER = ["AAPL", "MSFT", "FB"]
+SRI_KEHATI_TICKER = [
+		"AALI.JK",
+		"ADHI.JK",
+		"ASII.JK",
+		"BBCA.JK", 
+		"BBNI.JK",
+		"BBRI.JK",
+		"BBTN.JK",
+		"BMRI.JK",
+		"BSDE.JK",
+		"INDF.JK",
+		"JPFA.JK",
+		"JSMR.JK",
+		"KLBF.JK",
+		"PGAS.JK",
+		"PJAA.JK",
+		"PPRO.JK",
+		"SIDO.JK",
+		"SMGR.JK",
+		"TINS.JK",
+		"TLKM.JK",
+		"UNTR.JK",
+		"UNVR.JK",
+		"WIKA.JK",
+		"WSKT.JK",
+		"WTON.JK"
+]
 
 # check https://wrds-www.wharton.upenn.edu/ for U.S. index constituents
 # Dow 30 constituents at 2019/01
@@ -1139,5 +1166,287 @@ CSI_300_TICKER = [
     "300628.SZ",
 ]
 
+# Check https://www.bnains.org/archives/histocac/compocac.php for CAC 40 constituents
+# CAC 40 constituents at 2019/01
+CAC_40_TICKER = [
+    "AC.PA",
+    "AI.PA",
+    "AIR.PA",
+    "MT.AS",
+    "ATO.PA",
+    "CS.PA",
+    "BNP.PA",
+    "EN.PA",
+    "CAP.PA",
+    "CA.PA",
+    "ACA.PA",
+    "BN.PA",
+    "DSY.PA",
+    "ENGI.PA",
+    "EL.PA",
+    "RMS.PA",
+    "KER.PA",
+    "OR.PA",
+    "LR.PA",
+    "MC.PA",
+    "ML.PA",
+    "ORA.PA",
+    "RI.PA",
+    "PUGOY",
+    "PUB.PA",
+    "RNO.PA",
+    "SAF.PA",
+    "SGO.PA",
+    "SAN.PA",
+    "SU.PA",
+    "GLE.PA",
+    "SW.PA",
+    "STM.PA",
+    "FTI.PA",
+    "FP.PA",
+    "URW.AS",
+    "FR.PA",
+    "VIE.PA",
+    "DG.PA",
+    "VIV.PA",
+]
+
+# DAX 30 constituents at 2021/02
+DAX_30_TICKER = [
+	"DHER.DE", 
+	"RWE.DE", 
+	"FRE.DE",
+	"MTX.DE",
+	"MRK.DE", 
+	"LIN.DE", 
+	"ALV.DE", 
+	"VNA.DE", 
+	"EOAN.DE", 
+	"HEN3.DE", 
+	"DAI.DE", 
+	"DB1.DE", 
+	"DPW.DE", 
+	"DWNI.DE", 
+	"BMW.DE", 
+	"DTE.DE", 
+	"VOW3.DE", 
+	"MUV2.DE", 
+	"1COV.DE", 
+	"SAP.DE", 
+	"FME.DE", 
+	"BAS.DE", 
+	"BAYN.DE", 
+	"BEI.DE", 
+	"CON.DE", 
+	"SIE.DE", 
+	"ADS.DE", 
+	"HEI.DE", 
+	"DBK.DE", 
+	"IFX.DE"
+]
+
+# TecDAX constituents at 2021/02
+TECDAX_TICKER = [
+	'ADV.DE',
+	'AFX.DE',
+	'AM3D.DE',
+	'BC8.DE',
+	'COK.DE',
+	'DLG.DE',
+	'DRI.DE',
+	'DRW3.DE',
+	'EVT.DE',
+	'FNTN.DE',
+	'GFT.DE',
+	'JEN.DE',
+	'MDG1.DE',
+	'MOR.DE',
+	'NDX1.DE',
+	'NEM.DE',
+	'O2D.DE',
+	'PFV.DE',
+	'QIA.DE',
+	'RIB.DE',
+	'S92.DE',
+	'SANT.DE',
+	'SOW.DE',
+	'SRT3.DE',
+	'UTDI.DE',
+	'WAF.DE',
+	'WDI.DE'
+]
+
+# MDAX 50 constituents at 2021/02
+MDAX_50_TICKER = [
+	'1COV.DE',
+	 'AIR.DE',
+	 'AOX.DE',
+	 'ARL.DE',
+	 'BNR.DE',
+	 'BOSS.DE',
+	 'DEQ.DE',
+	 'DUE.DE',
+	 'DWNI.DE',
+	 'EVD.DE',
+	 'EVK.DE',
+	 'FIE.DE',
+	 'FPE3.DE',
+	 'FRA.DE',
+	 'G1A.DE',
+	 'GBF.DE',
+	 'GXI.DE',
+	 'HLE.DE',
+	 'HNR1.DE',
+	 'HOT.DE',
+	 'JUN3.DE',
+	 'KGX.DE',
+	 'KRN.DE',
+	 'LEG.DE',
+	 'LEO.DE',
+	 'LXS.DE',
+	 'MTX.DE',
+	 'NDA.DE',
+	 'NOEJ.DE',
+	 'OSR.DE',
+	 'PBB.DE',
+	 'RAA.DE',
+	 'RHM.DE',
+	 'RRTL.DE',
+	 'SAX.DE',
+	 'SDF.DE',
+	 'SHA.DE',
+	 'SNH.DE',
+	 'SY1.DE',
+	 'SZG.DE',
+	 'SZU.DE',
+	 'TEG.DE',
+	 'TLX.DE',
+	 'UN01.DE',
+	 'WCH.DE',
+	 'ZAL.DE'
+]
+
+# SDAX 50 constituents at 2021/02
+SDAX_50_TICKER = [
+	'AAD.DE',
+	 'ACX.DE',
+	 'ADJ.DE',
+	 'ADL.DE',
+	 'BDT.DE',
+	 'BIO3.DE',
+	 'BVB.DE',
+	 'BYW6.DE',
+	 'CWC.DE',
+	 'DBAN.DE',
+	 'DEZ.DE',
+	 'DIC.DE',
+	 'G24.DE',
+	 'GIL.DE',
+	 'GLJ.DE',
+	 'GMM.DE',
+	 'HBH.DE',
+	 'HDD.DE',
+	 'HHFA.DE',
+	 'HLAG.DE',
+	 'HYQ.DE',
+	 'INH.DE',
+	 'KCO.DE',
+	 'KWS.DE',
+	 'PUM.DE',
+	 'RHK.DE',
+	 'SFQ.DE',
+	 'SGL.DE',
+	 'SIX2.DE',
+	 'SKB.DE',
+	 'STM.DE',
+	 'TC1.DE',
+	 'TLG.DE',
+	 'TTK.DE',
+	 'VOS.DE',
+	 'WAC.DE',
+	 'WCMK.DE',
+	 'WSU.DE',
+	 'WUW.DE',
+	 'ZIL2.DE',
+	 'ZO1.DE'
+]
+
 ############## Stock Ticker Setup ends ##############
-########################################################
+
+###Jan 20,2020, added by YuQing Huang###################
+################FX Ticker Setup Start###################
+FX_TICKER = ["AUDCAD=X",
+            "AUDCHF=X",
+            "AUDJPY=X",
+            "AUDNZD=X",
+            "AUDSGD=X",
+            "AUDUSD=X",
+            "AUDUSD=X",
+            "AUDUSD=X",
+            "AUDUSD=X",
+            "AUDUSD=X",
+            "AUDUSD=X",
+            "AUDUSD=X",
+            "CADCHF=X",
+            "CADHKD=X",
+            "CADJPY=X",
+            "CHFJPY=X",
+            "CHFSGD=X",
+            "EURAUD=X",
+            "EURCAD=X",
+            "EURCHF=X",
+            "EURCHF=X",
+            "EURCHF=X",
+            "EURCZK=X",
+            "EURGBP=X",
+            "EURHKD=X",
+            "EURHUF=X",
+            "EURJPY=X",
+            "EURNOK=X",
+            "EURNZD=X",
+            "EURPLN=X",
+            "EURRUB=X",
+            "EURSEK=X",
+            "EURSGD=X",
+            "EURTRY=X",
+            "EURTRY=X",
+            "EURUSD=X",
+            "GBPAUD=X",
+            "GBPAUD=X",
+            "GBPAUD=X",
+            "GBPCAD=X",
+            "GBPCHF=X",
+            "GBPJPY=X",
+            "GBPNZD=X",
+            "GBPUSD=X",
+            "HKDJPY=X",
+            "NZDCAD=X",
+            "NZDCHF=X",
+            "NZDJPY=X",
+            "NZDUSD=X",
+            "SGDJPY=X",
+            "TRYJPY=X",
+            "USDCAD=X",
+            "USDCHF=X",
+            "USDCNH=X",
+            "USDCZK=X",
+            "USDHKD=X",
+            "USDHUF=X",
+            "USDILS=X",
+            "USDJPY=X",
+            "USDMXN=X",
+            "USDNOK=X",
+            "USDPLN=X",
+            "USDRON=X",
+            "USDRUB=X",
+            "USDSEK=X",
+            "USDSGD=X",
+            "USDTHB=X",
+            "USDTRY=X",
+            "USDZAR=X",
+            "XAGUSD=X",
+            "XAUUSD=X",
+            "ZARJPY=X",
+            "EURDKK=X"
+]
+################FX Ticker Setup End###################
